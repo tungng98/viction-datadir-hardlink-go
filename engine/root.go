@@ -10,9 +10,11 @@ import (
 func Execute() {
 	rootCmd := &cobra.Command{
 		Use:     "viction-datadir-hardlink",
-		Short:   "Viction Blockchain data clone via hard link.",
+		Short:   "Viction blockchain datadir cloner.",
 		Version: version(),
 	}
+
+	rootCmd.AddCommand(CloneCmd())
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

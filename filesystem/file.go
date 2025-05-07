@@ -1,10 +1,36 @@
 package filesystem
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 )
+
+func CopyFile(srcPath, dstPath string) error {
+	srcFile, err := os.Open(srcPath)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+
+	dstDir := filepath.Dir(dstPath)
+	if !IsExist(dstDir) {
+		err := os.MkdirAll(dstDir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	dstFile, err := os.Create(dstPath)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+
+	_, err = io.Copy(dstFile, srcFile)
+	return err
+}
 
 func GetAbsPath(fPath string) (string, error) {
 	absolutePath, err := filepath.Abs(fPath)
